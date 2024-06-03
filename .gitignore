@@ -1,3 +1,4 @@
 .DS_Store
 __pycache__
 data/voting-stations-results/
+output/*.csv
