@@ -2,10 +2,11 @@ import os
 import json
 import csv
 
+from config import BALLOT_RESULTS_ENDPOINT, EVENT_IDS
 from utils import get_json_from_endpoint, save_json_to_file_in_directory
 
 
-event_ids = [1335, 1334]
+event_ids = EVENT_IDS
 
 voting_stations = []
 with open(f"data/voting-stations.json", "r") as file:
@@ -38,7 +39,7 @@ for event_id in event_ids:
                 municipality_id = voting_station["MunicipalityID"]
 
                 vd_result = get_json_from_endpoint(
-                    f"api/v1/NPEBallotResults?ElectoralEventID={event_id}&ProvinceID={province_id}&MunicipalityID={municipality_id}&VDNumber={vd_number}"
+                    f"{BALLOT_RESULTS_ENDPOINT}?ElectoralEventID={event_id}&ProvinceID={province_id}&MunicipalityID={municipality_id}&VDNumber={vd_number}"
                 )
 
                 save_json_to_file_in_directory(
