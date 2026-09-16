@@ -91,3 +91,9 @@ for event_id in EVENT_IDS:
             f"{data_directory}/provincial-candidates", str(province_id), context
         )
     write_csv(candidates, output_directory, "candidates.csv")
+
+    write_csv(
+        records_from(data_directory, "special-votes", {}),
+        output_directory,
+        "special-votes.csv",
+    )

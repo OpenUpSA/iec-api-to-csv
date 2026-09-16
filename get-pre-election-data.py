@@ -6,6 +6,9 @@ from utils import (
 )
 
 
+# Special vote dates and venues
+upcoming_special_votes = get_json_from_endpoint("api/SpecialVotes/UpComingSpecialVotes")
+
 electoral_event_types = get_json_from_endpoint("api/v1/ElectoralEvent")
 
 electoral_events = []
@@ -19,6 +22,7 @@ for event_id in EVENT_IDS:
 
     save_json_to_file_in_directory(electoral_event_types, data_directory, "electoral-event-types")
     save_json_to_file_in_directory(electoral_events, data_directory, "electoral-events")
+    save_json_to_file_in_directory(upcoming_special_votes, data_directory, "special-votes")
 
     event = next(
         (e for e in electoral_events if event_id in (e.get("ElectoralEventID"), e.get("ID"))),
@@ -28,13 +32,6 @@ for event_id in EVENT_IDS:
         print(f"Electoral event {event_id}: {event.get('Description', event)}")
     else:
         print(f"Warning: event {event_id} not in the ElectoralEvent list. Continuing anyway.")
-
-    # Ward and municipal boundaries
-    save_json_to_file_in_directory(
-        get_json_from_endpoint(f"api/v1/Delimitation?ElectoralEventID={event_id}"),
-        data_directory,
-        "delimitation",
-    )
 
     # Voting stations
     voting_stations = get_json_from_endpoint(
