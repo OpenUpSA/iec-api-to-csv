@@ -6,15 +6,23 @@ from utils import (
 )
 
 
-electoral_events = get_json_from_endpoint("api/v1/ElectoralEvent")
+electoral_event_types = get_json_from_endpoint("api/v1/ElectoralEvent")
+
+electoral_events = []
+for electoral_event_type in electoral_event_types:
+    electoral_events += get_json_from_endpoint(
+        f"api/v1/ElectoralEvent?ElectoralEventTypeID={electoral_event_type['ID']}"
+    )
 
 for event_id in EVENT_IDS:
     data_directory = f"data/{event_id}"
 
+    save_json_to_file_in_directory(electoral_event_types, data_directory, "electoral-event-types")
     save_json_to_file_in_directory(electoral_events, data_directory, "electoral-events")
 
     event = next(
-        (e for e in electoral_events if e.get("ElectoralEventID") == event_id), None
+        (e for e in electoral_events if event_id in (e.get("ElectoralEventID"), e.get("ID"))),
+        None,
     )
     if event:
         print(f"Electoral event {event_id}: {event.get('Description', event)}")

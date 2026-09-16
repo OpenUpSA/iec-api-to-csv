@@ -17,8 +17,13 @@ def get_json_from_endpoint(endpoint):
         return []
     try:
         return response.json()
-    except json.JSONDecodeError as e:
-        print(f"Error decoding response from {base_url + endpoint}: {e}")
+    except json.JSONDecodeError:
+        # An empty body with a 200 means the IEC has nothing to serve yet
+        body = response.text.strip()
+        if not body:
+            print(f"Empty response ({response.status_code}) from {url}")
+        else:
+            print(f"Non-JSON response ({response.status_code}) from {url}: {body[:200]}")
         return []
 
 
