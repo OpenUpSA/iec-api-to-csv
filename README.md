@@ -21,6 +21,15 @@ Re-run as candidate lists are finalised: anything already
 downloaded is skipped. JSON is kept under `data/<event id>/` and the CSVs land
 in `output/pre-election/<event id>/`
 
+For local elections, get the current (incumbent) ward councillor for every ward:
+
+```
+python get-ward-councillors.py
+```
+
+The ward IDs come from the voting stations saved by `get-pre-election-data.py`,
+so run that first. PR councillors are not available from the API.
+
 ## On and after election day
 
 ```
@@ -67,6 +76,11 @@ curl "https://api.elections.org.za/api/v1/LatestResultsIn?ElectoralEventID=${EID
 ## Get a voting station's results
 ```
 curl "https://api.elections.org.za/api/v1/NPEBallotResults?ElectoralEventID=1335&ProvinceID=3&MunicipalityID=3003&VDNumber=32841266" -H "Authorization: Bearer ${IEC_API_TOKEN}"
+```
+
+## Get the current ward councillor for a ward
+```
+curl "https://api.elections.org.za/api/v1/LGEWardCouncilor?WardID=52605003" -H "Authorization: Bearer ${IEC_API_TOKEN}"
 ```
 
 ## Get a voting station's results in a municipal election
